@@ -156,7 +156,7 @@ class ClerkAuthService {
     
     try {
       // First check if user exists in Supabase
-      let userProfile = await this.getUserProfile(clerkUserId);
+      const userProfile = await this.getUserProfile(clerkUserId);
       
       if (!userProfile) {
         // User doesn't exist, we need to create them

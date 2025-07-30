@@ -1,0 +1,182 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isProvider() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/providers/$(request.auth.uid));
+    }
+    
+    function isParticipant(booking) {
+      return isAuthenticated() && 
+        (request.auth.uid == booking.data.buyerId || 
+         request.auth.uid == booking.data.sellerId);
+    }
+    
+    function isValidPrice(price) {
+      return price is int && price > 0 && price <= 1000000; // Max $10,000
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && 
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['createdAt', 'uid']));
+      allow delete: if false; // Users cannot be deleted
+    }
+    
+    // Providers collection
+    match /providers/{providerId} {
+      allow read: if true; // Public profiles
+      allow create: if isOwner(providerId) && 
+        request.resource.data.keys().hasAll(['name', 'email', 'createdAt']) &&
+        request.resource.data.stripeConnected == false;
+      allow update: if isOwner(providerId) && 
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['createdAt', 'uid']));
+      allow delete: if false;
+    }
+    
+    // Services collection
+    match /services/{serviceId} {
+      allow read: if resource.data.active == true || isOwner(resource.data.providerId);
+      allow create: if isProvider() && 
+        request.resource.data.providerId == request.auth.uid &&
+        isValidPrice(request.resource.data.price) &&
+        request.resource.data.keys().hasAll(['name', 'description', 'price', 'duration', 'category']);
+      allow update: if isOwner(resource.data.providerId) &&
+        request.resource.data.providerId == resource.data.providerId;
+      allow delete: if isOwner(resource.data.providerId);
+    }
+    
+    // Bookings collection
+    match /bookings/{bookingId} {
+      allow read: if isParticipant(resource);
+      allow create: if isAuthenticated() && 
+        request.resource.data.buyerId == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        exists(/databases/$(database)/documents/services/$(request.resource.data.serviceId));
+      allow update: if isParticipant(resource) &&
+        // Only allow status updates and completion timestamps
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'updatedAt', 'completedAt', 'cancelledAt']);
+      allow delete: if false;
+    }
+    
+    // Messages collection
+    match /messages/{messageId} {
+      allow read: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/bookings/$(resource.data.conversationId)) &&
+        isParticipant(get(/databases/$(database)/documents/bookings/$(resource.data.conversationId)));
+      allow create: if isAuthenticated() && 
+        request.resource.data.senderId == request.auth.uid &&
+        exists(/databases/$(database)/documents/bookings/$(request.resource.data.conversationId)) &&
+        isParticipant(get(/databases/$(database)/documents/bookings/$(request.resource.data.conversationId)));
+      allow update: if false; // Messages are immutable
+      allow delete: if false;
+    }
+    
+    // Reviews collection
+    match /reviews/{reviewId} {
+      allow read: if true; // Public reviews
+      allow create: if isAuthenticated() && 
+        request.resource.data.buyerId == request.auth.uid &&
+        exists(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)) &&
+        get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.buyerId == request.auth.uid &&
+        get(/databases/$(database)/documents/bookings/$(request.resource.data.bookingId)).data.status == 'completed' &&
+        request.resource.data.rating >= 1 && request.resource.data.rating <= 5;
+      allow update: if isOwner(resource.data.buyerId) && 
+        resource.data.createdAt == request.resource.data.createdAt;
+      allow delete: if false;
+    }
+    
+    // Categories collection (read-only)
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if false; // Admin only via console
+    }
+    
+    // Typing indicators collection
+    match /typing/{typingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && 
+        request.resource.data.userId == request.auth.uid;
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read: if isOwner(resource.data.userId);
+      allow create: if false; // Created by Cloud Functions only
+      allow update: if isOwner(resource.data.userId) && 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt']);
+      allow delete: if isOwner(resource.data.userId);
+    }
+    
+    // Analytics collection (write-only for users)
+    match /analytics/{analyticsId} {
+      allow read: if false;
+      allow create: if isAuthenticated();
+      allow update: if false;
+      allow delete: if false;
+    }
+    
+    // Webhook events collection (admin only)
+    match /webhook_events/{eventId} {
+      allow read: if false;
+      allow write: if false; // Only server can write
+    }
+    
+    // Transactions collection
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && (resource.data.customerId == request.auth.uid || 
+                                           resource.data.providerId == request.auth.uid);
+      allow write: if false; // Only server can write
+    }
+    
+    // Charges collection
+    match /charges/{chargeId} {
+      allow read: if false; // Admin only via server
+      allow write: if false; // Only server can write
+    }
+    
+    // Payment failures collection
+    match /payment_failures/{failureId} {
+      allow read: if isAuthenticated() && resource.data.customerId == request.auth.uid;
+      allow write: if false; // Only server can write
+    }
+    
+    // Refunds collection
+    match /refunds/{refundId} {
+      allow read: if isAuthenticated() && (resource.data.customerId == request.auth.uid || 
+                                           resource.data.providerId == request.auth.uid);
+      allow write: if false; // Only server can write
+    }
+    
+    // Payouts collection
+    match /payouts/{payoutId} {
+      allow read: if isAuthenticated() && resource.data.providerId == request.auth.uid;
+      allow write: if false; // Only server can write
+    }
+    
+    // Provider bank accounts collection
+    match /provider_bank_accounts/{accountId} {
+      allow read: if isAuthenticated() && resource.data.providerId == request.auth.uid;
+      allow write: if false; // Only server can write
+    }
+    
+    // Person verifications collection
+    match /person_verifications/{verificationId} {
+      allow read: if isAuthenticated() && resource.data.providerId == request.auth.uid;
+      allow write: if false; // Only server can write
+    }
+  }
+}

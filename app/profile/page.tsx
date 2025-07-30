@@ -10,11 +10,11 @@ export default function ProfilePage() {
   const { user, isSignedIn } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: user?.fullName || 'John Doe',
+    fullName: user?.display_name || 'John Doe',
     email: user?.email || 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    location: 'San Francisco, CA',
-    bio: 'Passionate about wellness and helping others achieve their goals.'
+    phone: user?.phone_number || '+1 (555) 123-4567',
+    location: user?.location || 'San Francisco, CA',
+    bio: user?.bio || 'Passionate about wellness and helping others achieve their goals.'
   });
 
   const handleSave = () => {
@@ -66,6 +66,8 @@ export default function ProfilePage() {
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1 text-white"
+                      placeholder="Enter your full name"
+                      aria-label="Full name"
                     />
                   ) : (
                     formData.fullName
@@ -130,6 +132,8 @@ export default function ProfilePage() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                      placeholder="Enter your email"
+                      aria-label="Email address"
                     />
                   ) : (
                     <span className="text-gray-300">{formData.email}</span>
@@ -144,6 +148,8 @@ export default function ProfilePage() {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                      placeholder="Enter your phone number"
+                      aria-label="Phone number"
                     />
                   ) : (
                     <span className="text-gray-300">{formData.phone}</span>
@@ -158,6 +164,8 @@ export default function ProfilePage() {
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                      placeholder="Enter your location"
+                      aria-label="Location"
                     />
                   ) : (
                     <span className="text-gray-300">{formData.location}</span>
@@ -175,6 +183,8 @@ export default function ProfilePage() {
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                   rows={4}
                   className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white resize-none"
+                  placeholder="Tell us about yourself"
+                  aria-label="Bio"
                 />
               ) : (
                 <p className="text-gray-300">{formData.bio}</p>

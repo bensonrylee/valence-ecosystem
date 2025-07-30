@@ -2,177 +2,149 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom animations */
-@layer base {
-  :root {
-    --bg-primary: #0D0D0D;
-    --bg-secondary: #1A1A1A;
-    --bg-card: #141414;
-    --text-primary: #FFFFFF;
-    --text-secondary: #A3A3A3;
-    --accent: #00FFAD;
-    --border: rgba(255, 255, 255, 0.1);
-  }
-  
-  body {
-    @apply bg-gray-900 text-white antialiased;
-  }
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
 }
 
-/* Glass morphism components */
-@layer components {
-  .glass-panel {
-    @apply backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl;
-  }
-  
-  .glass-input {
-    @apply backdrop-blur-md bg-white/5 border border-white/10 rounded-xl px-4 py-3 
-           text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20
-           transition-all duration-300;
-  }
-  
-  .glass-button-primary {
-    @apply backdrop-blur-md bg-[#00FFAD]/20 border border-[#00FFAD]/30 text-[#00FFAD] 
-           hover:bg-[#00FFAD]/30 hover:border-[#00FFAD]/50 hover:shadow-lg hover:shadow-[#00FFAD]/20
-           active:scale-[0.98] transition-all duration-300;
-  }
-  
-  .neon-button {
-    @apply bg-[#00FFAD] text-gray-900 font-semibold
-           hover:bg-[#00FF8C] hover:shadow-lg hover:shadow-[#00FFAD]/40
-           active:scale-[0.98] transition-all duration-300;
-  }
-}
-
-/* Custom scrollbar styles */
-@layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Custom dark scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-gray-800;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600 rounded-full;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-500;
-  }
-}
-
-/* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
 }
 
-/* Remove spinner from number inputs */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+body {
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Custom focus styles */
-*:focus {
-  outline: none;
+::-webkit-scrollbar-track {
+  background: #1f2937;
 }
 
-*:focus-visible {
-  @apply ring-2 ring-[#00FFAD] ring-offset-2 ring-offset-gray-900;
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
 }
 
-/* Loading animation */
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Glass morphism effect */
+.glass-panel {
+  background: rgba(31, 41, 55, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Loading animations */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
   }
   50% {
-    opacity: .5;
+    opacity: 0.5;
   }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Utility classes */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
 }
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Custom animations */
-@keyframes slideUp {
-  from {
-    transform: translateY(10px);
-    opacity: 0;
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus styles for accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid #00FFAD;
+  outline-offset: 2px;
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
   }
 }
 
-.animate-slide-up {
-  animation: slideUp 0.3s ease-out;
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
 }
 
-/* Line clamp utilities */
-.line-clamp-1 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass-panel {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00FFAD;
+  }
 }
 
-.line-clamp-2 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.line-clamp-3 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-
-/* Animation delays */
-.animation-delay-0 {
-  animation-delay: 0ms;
-}
-
-.animation-delay-150 {
-  animation-delay: 150ms;
-}
-
-.animation-delay-300 {
-  animation-delay: 300ms;
-}
-
-/* Screen reader only */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+/* Container queries support (future) */
+@supports (container-type: inline-size) {
+  .container-query {
+    container-type: inline-size;
+  }
 }

@@ -5,7 +5,7 @@ import { cn } from '@/lib/theme-constants';
 import { HTMLMotionProps } from 'framer-motion';
 
 export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'ref' | 'children'> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   fullWidth?: boolean;
@@ -30,6 +30,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       secondary: 'glass-button-primary',
       ghost: 'bg-transparent text-gray-300 hover:text-[#00FFAD] hover:bg-white/5 focus:ring-[#00FFAD]/20',
       danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+      outline: 'border border-[#00FFAD] text-[#00FFAD] hover:bg-[#00FFAD]/10 focus:ring-[#00FFAD]/20',
     };
     
     const sizes = {
