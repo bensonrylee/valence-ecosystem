@@ -236,15 +236,115 @@ To create a new agent:
 - Provide more specific targets
 - Report issues for prompt improvements
 
-## Future Enhancements
+## Advanced Features
 
-- [ ] Dry-run mode for preview
+### 🆕 Agent Generator
+Create new agents with one command:
+```bash
+./.claude/agents/new-agent.sh api-validator "Validates API endpoints and OpenAPI specs"
+```
+
+### 🔍 Dry Run Mode
+Preview changes without applying them:
+```bash
+./.claude/agents/agent-runner.sh test-fix --dry-run
+./.claude/agents/agent-runner.sh firebase-fix --dry-run --diff
+```
+
+### ⛓️ Agent Chains
+Run multiple agents in sequence:
+```bash
+# Run TypeScript check → UI validation → booking logic
+./.claude/agents/agent-runner.sh chain quality-check ui-check booking-validate
+
+# Custom chain with dry-run
+./.claude/agents/agent-runner.sh chain test-fix code-quality --dry-run
+```
+
+### 👁️ File Watcher
+Auto-run agents on file changes:
+```bash
+# Start watching (runs appropriate agent when files change)
+./.claude/agents/watch-mode.sh
+
+# Watch with dry-run mode
+./.claude/agents/watch-mode.sh --dry-run
+```
+
+### 🪝 Git Hooks
+Install pre-commit and pre-push hooks:
+```bash
+./.claude/agents/install-hooks.sh
+```
+
+### 🐳 Docker Support
+Run agents in containers:
+```bash
+# Build dev container
+docker build -f .devcontainer/Dockerfile -t valence-agents .
+
+# Run agent in container
+docker run -v $(pwd):/workspace valence-agents \
+  /workspace/.claude/agents/agent-runner.sh pre-deploy
+```
+
+## CI/CD Integration
+
+The repository includes GitHub Actions workflow for automated validation:
+- `.github/workflows/claude-agents.yml` - Runs on PRs and pushes
+- Builds and publishes dev container images
+- Supports manual workflow dispatch
+
+## Command Reference
+
+| Command | Description | Options |
+|---------|-------------|---------|
+| `test-fix` | Fix failing E2E tests | `--target`, `--dry-run` |
+| `firebase-fix` | Fix Firebase config | `--target`, `--dry-run` |
+| `ui-check` | Validate UI consistency | `--target`, `--dry-run` |
+| `booking-validate` | Check booking flow | `--target`, `--dry-run` |
+| `quality-check` | Code quality analysis | `--target`, `--dry-run` |
+| `chain` | Run multiple agents | List of agents |
+| `pre-deploy` | Full validation pipeline | `--dry-run` |
+| `fix-all` | Apply all auto-fixes | `--dry-run` |
+
+### Global Options
+- `--dry-run` - Preview changes without applying
+- `--diff` - Show detailed diffs
+- `--verbose` - Show debug output
+- `--target <path>` - Target specific file/directory
+
+## Scaling Your Agent System
+
+### For Teams
+1. Share agent configurations via version control
+2. Customize rules per project requirements
+3. Add team-specific agents using `new-agent.sh`
+4. Integrate with existing CI/CD pipelines
+
+### For Enterprise
+Consider building:
+- Web dashboard for agent results
+- Centralized agent management
+- Custom rule engines
+- API for external integrations
+- SaaS platform for code validation
+
+## Future Roadmap
+
+- [x] Dry-run mode for preview
+- [x] Agent chaining/composition
+- [x] File system watcher
+- [x] Docker/container support
+- [x] Git hooks integration
 - [ ] Progress indicators
 - [ ] Parallel agent execution
 - [ ] Web dashboard for results
-- [ ] Custom rule definitions
-- [ ] Agent composition/chaining
+- [ ] Agent marketplace
+- [ ] AI-powered rule generation
 
 ---
 
-**Note**: These agents augment but don't replace human code review. Always verify changes match your expectations before committing.
+**🚀 You're now deploying autonomous engineers inside your stack!**
+
+These agents augment but don't replace human code review. Always verify changes match your expectations before committing.

@@ -1,25 +1,27 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/explore",
-    "/how-it-works",
-    "/services/(.*)",
-    "/providers/(.*)",
-    "/api/webhook/stripe",
-    "/api/webhook/clerk",
-    "/api/public/(.*)",
-  ],
-  afterAuth(auth, req) {
-    // Handle users who aren't authenticated
-    if (!auth.userId && !auth.isPublicRoute) {
-      const signInUrl = new URL('/auth/sign-in', req.url);
-      signInUrl.searchParams.set('redirect_url', req.url);
-      return NextResponse.redirect(signInUrl);
-    }
-  },
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/explore",
+  "/how-it-works",
+  "/services/(.*)",
+  "/providers/(.*)",
+  "/api/webhook/stripe",
+  "/api/webhook/clerk",
+  "/api/public/(.*)",
+  "/auth/sign-in(.*)",
+  "/auth/sign-up(.*)",
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  // Protect all routes except public ones
+  const { userId } = await auth();
+  if (!isPublicRoute(req) && !userId) {
+    const signInUrl = new URL('/auth/sign-in', req.url);
+    signInUrl.searchParams.set('redirect_url', req.url);
+    return NextResponse.redirect(signInUrl);
+  }
 });
 
 export const config = {

@@ -24,9 +24,14 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env.local
 
 # vercel
 .vercel
+
+# Claude agents are included for Claude Code CLI
+# The .claude directory contains agents for automated validation
+# DO NOT add .claude to gitignore - it's needed for development
 
 # typescript
 *.tsbuildinfo

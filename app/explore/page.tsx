@@ -5,6 +5,7 @@ import { Search, Filter, MapPin } from 'lucide-react';
 import { servicesService } from '@/lib/supabase/services';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/Navigation';
+import { Card } from '@/components/ui/primitives/Card';
 
 // Mock data for demonstration
 const mockServices = [
@@ -163,7 +164,7 @@ export default function ExplorePage() {
             {isLoading ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="glass-panel p-6 animate-pulse" data-testid="service-skeleton">
+                  <Card key={i} className="animate-pulse" data-testid="service-skeleton">
                     <div className="bg-gray-700 h-48 rounded-lg mb-4"></div>
                     <div className="bg-gray-700 h-4 rounded mb-2"></div>
                     <div className="bg-gray-700 h-3 rounded mb-4"></div>
@@ -171,13 +172,14 @@ export default function ExplorePage() {
                       <div className="bg-gray-700 h-3 w-20 rounded"></div>
                       <div className="bg-gray-700 h-3 w-16 rounded"></div>
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             ) : filteredServices.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredServices.map((service) => (
-                  <Link key={service.id} href={`/services/${service.id}`} className="block glass-panel p-6 hover:bg-white/10 hover:border-[#00FFAD]/20 transition-all cursor-pointer" data-testid="service-card">
+                  <Link key={service.id} href={`/services/${service.id}`} className="block" data-testid="service-card">
+                    <Card hover>
                     <div className="bg-gray-700 h-48 rounded-lg mb-4 flex items-center justify-center">
                       <span className="text-gray-400">Image</span>
                     </div>
@@ -205,6 +207,7 @@ export default function ExplorePage() {
                         ${service.price}/hr
                       </div>
                     </div>
+                    </Card>
                   </Link>
                 ))}
               </div>

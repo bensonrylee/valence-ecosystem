@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { Search, Star, Shield, Clock } from 'lucide-react';
-import { auth } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import { UserButton } from '@clerk/nextjs';
 
 export default async function HomePage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Navigation */}

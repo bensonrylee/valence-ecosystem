@@ -1,7 +1,8 @@
 import React from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/theme-constants';
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends Omit<HTMLMotionProps<'div'>, 'ref'> {
   variant?: 'default' | 'glass' | 'bordered';
   padding?: 'sm' | 'md' | 'lg' | 'none';
   hover?: boolean;
@@ -9,18 +10,18 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Card: React.FC<CardProps> = ({
   className,
-  variant = 'default',
+  variant = 'glass',
   padding = 'md',
   hover = false,
   children,
   ...props
 }) => {
-  const baseStyles = 'rounded-lg transition-all duration-300';
+  const baseStyles = 'rounded-2xl transition-all duration-300';
   
   const variants = {
     default: 'bg-gray-800 border border-gray-700',
-    glass: 'bg-white/5 backdrop-blur-lg border border-white/10',
-    bordered: 'bg-transparent border border-gray-600',
+    glass: 'glass-panel',
+    bordered: 'bg-transparent border border-white/10',
   };
   
   const paddings = {
@@ -30,10 +31,12 @@ export const Card: React.FC<CardProps> = ({
     lg: 'p-8',
   };
   
-  const hoverStyles = hover ? 'hover:bg-white/10 hover:border-gray-600 cursor-pointer' : '';
+  const hoverStyles = hover ? 'hover:bg-white/10 hover:border-[#00FFAD]/20 hover:shadow-lg hover:shadow-[#00FFAD]/10 cursor-pointer' : '';
   
   return (
-    <div
+    <motion.div
+      whileHover={hover ? { y: -2 } : undefined}
+      transition={{ duration: 0.2 }}
       className={cn(
         baseStyles,
         variants[variant],
@@ -44,7 +47,7 @@ export const Card: React.FC<CardProps> = ({
       {...props}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 

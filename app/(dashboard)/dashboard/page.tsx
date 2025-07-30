@@ -1,11 +1,12 @@
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { BarChart3, Calendar, DollarSign, Users, TrendingUp, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/primitives/Card";
+import { getCurrentUser } from "@/lib/clerk-server-auth";
 
 export default async function DashboardPage() {
-  const { userId } = auth();
-  const user = await currentUser();
+  const { userId } = await auth();
+  const user = await getCurrentUser();
 
   if (!userId) {
     redirect("/auth/sign-in");
@@ -29,7 +30,7 @@ export default async function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-              <p className="text-gray-400 mt-1">Welcome back, {user?.firstName || 'there'}!</p>
+              <p className="text-gray-400 mt-1">Welcome back, {user?.display_name || 'there'}!</p>
             </div>
           </div>
         </div>

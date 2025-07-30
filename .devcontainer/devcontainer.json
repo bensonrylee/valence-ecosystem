@@ -1,0 +1,36 @@
+{
+  "name": "Valence Ecosystem Dev",
+  "dockerFile": "Dockerfile",
+  "forwardPorts": [3000, 3001],
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-playwright.playwright",
+        "prisma.prisma",
+        "GitHub.copilot"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact"]
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/home/developer/.claude-host,type=bind,consistency=cached"
+  ],
+  "remoteEnv": {
+    "CLAUDE_API_KEY": "${localEnv:CLAUDE_API_KEY}",
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+  },
+  "postStartCommand": "echo 'Claude agents available at: ~/.claude/agents/agent-runner.sh'"
+}

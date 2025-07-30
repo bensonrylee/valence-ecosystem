@@ -50,6 +50,22 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+
+    /* Mobile devices */
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 12'] },
+    },
+
+    {
+      name: 'tablet',
+      use: { ...devices['iPad (gen 7)'] },
+    },
   ],
 
   /* Run your local dev server before starting the tests */

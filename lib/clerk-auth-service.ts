@@ -1,4 +1,3 @@
-import { currentUser } from '@clerk/nextjs';
 import { supabase } from './supabase/config';
 
 export interface UserProfile {
@@ -34,74 +33,36 @@ class ClerkAuthService {
   // Create or update user profile in Supabase
   async syncUserProfile(clerkUser: any): Promise<UserProfile | null> {
     try {
-      const userProfile: Partial<UserProfile> = {
+      const userData = {
         clerk_id: clerkUser.id,
-        email: clerkUser.emailAddresses[0]?.emailAddress || '',
-        display_name: clerkUser.fullName || clerkUser.username || '',
+        email: clerkUser.emailAddresses?.[0]?.emailAddress || '',
+        display_name: clerkUser.fullName || clerkUser.username || 'User',
         image_url: clerkUser.imageUrl,
-        email_verified: clerkUser.emailAddresses[0]?.verification?.status === 'verified',
-        phone_number: clerkUser.phoneNumbers[0]?.phoneNumber,
-        updated_at: new Date(),
+        email_verified: clerkUser.emailAddresses?.[0]?.verification?.status === 'verified',
+        phone_number: clerkUser.phoneNumbers?.[0]?.phoneNumber,
       };
 
-      // Check if user exists
-      const { data: existingUser, error: fetchError } = await supabase
+      const { data, error } = await supabase
         .from('users')
-        .select('*')
-        .eq('clerk_id', clerkUser.id)
+        .upsert(userData, {
+          onConflict: 'clerk_id',
+        })
+        .select()
         .single();
 
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        console.error('Error fetching user:', fetchError);
+      if (error) {
+        console.error('Error syncing user profile:', error);
         return null;
       }
 
-      if (existingUser) {
-        // Update existing user
-        const { data, error } = await supabase
-          .from('users')
-          .update(userProfile)
-          .eq('clerk_id', clerkUser.id)
-          .select()
-          .single();
-
-        if (error) {
-          console.error('Error updating user profile:', error);
-          return null;
-        }
-        return data as UserProfile;
-      } else {
-        // Create new user
-        const newUserProfile: Partial<UserProfile> = {
-          ...userProfile,
-          role: 'customer',
-          created_at: new Date(),
-          settings: {
-            notifications: true,
-            marketing: true,
-            two_factor: false,
-          },
-        };
-
-        const { data, error } = await supabase
-          .from('users')
-          .insert(newUserProfile)
-          .select()
-          .single();
-
-        if (error) {
-          console.error('Error creating user profile:', error);
-          return null;
-        }
-        return data as UserProfile;
-      }
+      return data as UserProfile;
     } catch (error) {
-      console.error('Error syncing user profile:', error);
+      console.error('Error in syncUserProfile:', error);
       return null;
     }
   }
 
-  // Get user profile by Clerk ID
+  // Get user profile from Supabase
   async getUserProfile(clerkId: string): Promise<UserProfile | null> {
     try {
       const { data, error } = await supabase
@@ -111,13 +72,34 @@ class ClerkAuthService {
         .single();
 
       if (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error getting user profile:', error);
         return null;
       }
 
       return data as UserProfile;
     } catch (error) {
       console.error('Error in getUserProfile:', error);
+      return null;
+    }
+  }
+
+  // Get user profile by user ID (not clerk ID)
+  async getUserProfileById(userId: string): Promise<UserProfile | null> {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error getting user profile by ID:', error);
+        return null;
+      }
+
+      return data as UserProfile;
+    } catch (error) {
+      console.error('Error in getUserProfileById:', error);
       return null;
     }
   }
@@ -129,7 +111,7 @@ class ClerkAuthService {
         .from('users')
         .update({
           ...updates,
-          updated_at: new Date(),
+          updated_at: new Date().toISOString(),
         })
         .eq('clerk_id', clerkId)
         .select()
@@ -148,9 +130,11 @@ class ClerkAuthService {
   // Switch user role between customer and provider
   async switchUserRole(clerkId: string, role: 'customer' | 'provider') {
     try {
-      const updates: Partial<UserProfile> = { role };
-      
-      // If switching to provider, initialize provider profile
+      const updates: Partial<UserProfile> = {
+        role,
+      };
+
+      // Initialize provider profile if switching to provider
       if (role === 'provider') {
         updates.provider_profile = {
           services: [],
@@ -167,32 +151,26 @@ class ClerkAuthService {
   }
 
   // Get current user from server components
-  async getCurrentUser() {
+  async getCurrentUserServer(clerkUserId: string) {
+    if (!clerkUserId) return null;
+    
     try {
-      const clerkUser = await currentUser();
-      if (!clerkUser) return null;
+      // First check if user exists in Supabase
+      let userProfile = await this.getUserProfile(clerkUserId);
+      
+      if (!userProfile) {
+        // User doesn't exist, we need to create them
+        // This would typically be done through the webhook
+        console.warn('User not found in Supabase, profile sync required');
+        return null;
+      }
 
-      // Sync profile and return
-      const profile = await this.syncUserProfile(clerkUser);
-      return profile;
+      return userProfile;
     } catch (error) {
       console.error('Error getting current user:', error);
       return null;
     }
   }
-
-  // Check if user is provider
-  async isProvider(clerkId: string): Promise<boolean> {
-    const profile = await this.getUserProfile(clerkId);
-    return profile?.role === 'provider';
-  }
-
-  // Check if user is admin
-  async isAdmin(clerkId: string): Promise<boolean> {
-    const profile = await this.getUserProfile(clerkId);
-    return profile?.role === 'admin';
-  }
 }
 
 export const clerkAuthService = new ClerkAuthService();
-export default clerkAuthService;

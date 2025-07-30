@@ -1,11 +1,15 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/theme-constants';
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+import { HTMLMotionProps } from 'framer-motion';
+
+export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'ref' | 'children'> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   fullWidth?: boolean;
+  children?: React.ReactNode;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -22,9 +26,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed';
     
     const variants = {
-      primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-      secondary: 'bg-gray-700 text-white hover:bg-gray-600 focus:ring-gray-500',
-      ghost: 'bg-transparent text-gray-300 hover:bg-gray-800 hover:text-white focus:ring-gray-500',
+      primary: 'bg-[#00FFAD] text-gray-900 hover:bg-[#00FF8C] focus:ring-[#00FFAD] font-semibold shadow-lg shadow-[#00FFAD]/20',
+      secondary: 'glass-button-primary',
+      ghost: 'bg-transparent text-gray-300 hover:text-[#00FFAD] hover:bg-white/5 focus:ring-[#00FFAD]/20',
       danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
     };
     
@@ -35,8 +39,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
     
     return (
-      <button
+      <motion.button
         ref={ref}
+        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.1 }}
         className={cn(
           baseStyles,
           variants[variant],
@@ -70,7 +77,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {children}
-      </button>
+      </motion.button>
     );
   }
 );
