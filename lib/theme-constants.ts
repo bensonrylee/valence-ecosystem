@@ -60,7 +60,7 @@ export const theme = {
   // Glass panel styles (for dark theme)
   glass: {
     panel: 'bg-white/5 backdrop-blur-lg border border-white/10',
-    input: 'bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-1 focus:ring-blue-400',
+    input: 'bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-gray-400 focus:border-[#00FFAD] focus:ring-1 focus:ring-[#00FFAD]',
     button: 'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20',
   },
   
@@ -80,7 +80,7 @@ export const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ');
 };
 
-export const focusRing = 'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900';
+export const focusRing = 'focus:outline-none focus:ring-2 focus:ring-[#00FFAD] focus:ring-offset-2 focus:ring-offset-gray-900';
 
 export const glassPanelClasses = 'bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg';
-export const glassInputClasses = 'bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 rounded-lg px-4 py-2';
+export const glassInputClasses = 'bg-white/5 backdrop-blur-sm border border-white/10 text-white placeholder-gray-400 focus:border-[#00FFAD] focus:ring-1 focus:ring-[#00FFAD] rounded-lg px-4 py-2';

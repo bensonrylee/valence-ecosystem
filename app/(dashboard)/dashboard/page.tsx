@@ -41,12 +41,12 @@ export default async function DashboardPage() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-400">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-green-400" />
+              <DollarSign className="h-4 w-4 text-[#00FFAD]" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">${stats.totalRevenue.toLocaleString()}</div>
               <p className="text-xs text-gray-400 mt-1">
-                <span className="text-green-400">+{stats.monthlyGrowth}%</span> from last month
+                <span className="text-[#00FFAD]">+{stats.monthlyGrowth}%</span> from last month
               </p>
             </CardContent>
           </Card>
@@ -54,12 +54,12 @@ export default async function DashboardPage() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-400">Total Bookings</CardTitle>
-              <Calendar className="h-4 w-4 text-blue-400" />
+              <Calendar className="h-4 w-4 text-[#00FFAD]/80" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">{stats.totalBookings}</div>
               <p className="text-xs text-gray-400 mt-1">
-                <span className="text-blue-400">{stats.upcomingBookings}</span> upcoming
+                <span className="text-[#00FFAD]">{stats.upcomingBookings}</span> upcoming
               </p>
             </CardContent>
           </Card>
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-400">Active Clients</CardTitle>
-              <Users className="h-4 w-4 text-purple-400" />
+              <Users className="h-4 w-4 text-[#00FFAD]/60" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">{stats.activeClients}</div>
@@ -78,7 +78,7 @@ export default async function DashboardPage() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-gray-400">Average Rating</CardTitle>
-              <TrendingUp className="h-4 w-4 text-yellow-400" />
+              <TrendingUp className="h-4 w-4 text-[#00FFAD]/40" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">{stats.avgRating}</div>
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
           <Card variant="glass" className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-blue-400" />
+                <Clock className="h-5 w-5 text-[#00FFAD]" />
                 Upcoming Bookings
               </CardTitle>
             </CardHeader>
@@ -107,7 +107,7 @@ export default async function DashboardPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-medium text-white">${75 + i * 25}</p>
-                      <p className="text-sm text-blue-400">Confirmed</p>
+                      <p className="text-sm text-[#00FFAD]">Confirmed</p>
                     </div>
                   </div>
                 ))}
@@ -122,16 +122,16 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors text-gray-300">
+                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-[#00FFAD]/10 hover:border-[#00FFAD]/20 border border-transparent transition-all text-gray-300 hover:text-[#00FFAD]">
                   View Calendar
                 </button>
-                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors text-gray-300">
+                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-[#00FFAD]/10 hover:border-[#00FFAD]/20 border border-transparent transition-all text-gray-300 hover:text-[#00FFAD]">
                   Manage Services
                 </button>
-                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors text-gray-300">
+                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-[#00FFAD]/10 hover:border-[#00FFAD]/20 border border-transparent transition-all text-gray-300 hover:text-[#00FFAD]">
                   View Analytics
                 </button>
-                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition-colors text-gray-300">
+                <button className="w-full p-3 text-left bg-gray-800/50 rounded-lg hover:bg-[#00FFAD]/10 hover:border-[#00FFAD]/20 border border-transparent transition-all text-gray-300 hover:text-[#00FFAD]">
                   Message Clients
                 </button>
               </div>
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
         <Card variant="glass" className="mt-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-green-400" />
+              <BarChart3 className="h-5 w-5 text-[#00FFAD]" />
               Revenue Overview
             </CardTitle>
           </CardHeader>
