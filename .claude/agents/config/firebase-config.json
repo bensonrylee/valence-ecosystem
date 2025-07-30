@@ -1,0 +1,53 @@
+{
+  "name": "firebase-config",
+  "description": "Resolves Firebase Admin SDK issues, manages environment variables, and handles auth configuration",
+  "tools": ["read_file", "write_file", "search_files", "run_command"],
+  "targets": {
+    "config_files": ["lib/firebase/*.ts", ".env.local", ".env.local.example"],
+    "auth_files": ["app/api/**/*.ts", "lib/auth-service.ts"],
+    "function_files": ["functions/**/*.ts"]
+  },
+  "environment_variables": {
+    "required": [
+      "FIREBASE_ADMIN_PROJECT_ID",
+      "FIREBASE_ADMIN_CLIENT_EMAIL",
+      "FIREBASE_ADMIN_PRIVATE_KEY"
+    ],
+    "optional": [
+      "FIREBASE_DATABASE_URL",
+      "FIREBASE_STORAGE_BUCKET"
+    ],
+    "client_side": [
+      "NEXT_PUBLIC_FIREBASE_API_KEY",
+      "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+      "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+      "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+      "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+      "NEXT_PUBLIC_FIREBASE_APP_ID"
+    ]
+  },
+  "validation_rules": {
+    "admin_sdk": {
+      "check_initialization": true,
+      "validate_credentials": true,
+      "add_error_handling": true
+    },
+    "security": {
+      "no_hardcoded_keys": true,
+      "validate_private_key_format": true,
+      "check_gitignore": true
+    }
+  },
+  "common_fixes": {
+    "missing_env_vars": {
+      "create_env_example": true,
+      "add_fallbacks": true,
+      "log_warnings": true
+    },
+    "initialization_errors": {
+      "fix_private_key_format": true,
+      "add_try_catch": true,
+      "validate_project_id": true
+    }
+  }
+}

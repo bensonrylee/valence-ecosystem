@@ -13,6 +13,18 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Claude command detection
+CLAUDE_CMD=""
+if command -v claude &> /dev/null; then
+    CLAUDE_CMD="claude"
+elif command -v claude-cli &> /dev/null; then
+    CLAUDE_CMD="claude-cli"
+else
+    echo -e "${RED}Error: Claude CLI not found. Please install Claude CLI first.${NC}"
+    echo "Visit: https://docs.anthropic.com/claude/docs/claude-cli"
+    exit 1
+fi
+
 # Function to display usage
 usage() {
     echo -e "${BLUE}Claude Agent Runner for Valence Ecosystem${NC}"

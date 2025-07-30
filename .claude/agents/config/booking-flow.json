@@ -1,0 +1,81 @@
+{
+  "name": "booking-flow",
+  "description": "Validates booking, payment, escrow, and review pipeline logic",
+  "tools": ["read_file", "write_file", "search_files", "run_command"],
+  "targets": {
+    "booking_files": ["app/booking/**/*.tsx", "app/bookings/**/*.tsx"],
+    "payment_files": ["lib/stripe/*.ts", "app/api/stripe/**/*.ts"],
+    "service_files": ["app/services/**/*.tsx"],
+    "database_files": ["lib/supabase/*.ts", "lib/firebase/*.ts"]
+  },
+  "flow_stages": {
+    "discovery": {
+      "service_listing": true,
+      "availability_check": true,
+      "pricing_display": true
+    },
+    "booking": {
+      "date_selection": true,
+      "time_slots": true,
+      "booking_confirmation": true
+    },
+    "payment": {
+      "stripe_integration": true,
+      "payment_intent": true,
+      "escrow_hold": true
+    },
+    "fulfillment": {
+      "service_delivery": true,
+      "completion_confirmation": true,
+      "escrow_release": true
+    },
+    "review": {
+      "rating_system": true,
+      "review_submission": true,
+      "review_display": true
+    }
+  },
+  "validation_rules": {
+    "security": {
+      "validate_payment_amounts": true,
+      "check_authorization": true,
+      "prevent_double_booking": true
+    },
+    "data_integrity": {
+      "transaction_atomicity": true,
+      "state_consistency": true,
+      "audit_trail": true
+    },
+    "user_experience": {
+      "clear_status_updates": true,
+      "error_handling": true,
+      "loading_states": true
+    }
+  },
+  "stripe_config": {
+    "payment_methods": ["card"],
+    "connect_enabled": true,
+    "webhook_events": [
+      "payment_intent.succeeded",
+      "payment_intent.failed",
+      "charge.dispute.created"
+    ]
+  },
+  "common_fixes": {
+    "payment_issues": {
+      "validate_stripe_keys": true,
+      "fix_webhook_handling": true,
+      "add_idempotency": true
+    },
+    "booking_conflicts": {
+      "implement_locking": true,
+      "add_availability_checks": true,
+      "handle_race_conditions": true
+    },
+    "escrow_logic": {
+      "implement_hold_period": true,
+      "add_release_conditions": true,
+      "handle_disputes": true
+    }
+  }
+}

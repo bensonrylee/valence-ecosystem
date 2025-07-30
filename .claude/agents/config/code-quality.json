@@ -1,0 +1,66 @@
+{
+  "name": "code-quality",
+  "description": "Reviews code for TypeScript types, patterns, security, and prevents duplicate implementations",
+  "tools": ["read_file", "write_file", "search_files", "run_command"],
+  "targets": {
+    "source_files": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "lib/**/*.ts"],
+    "test_files": ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
+    "config_files": ["tsconfig.json", "eslint.config.js", ".prettierrc"]
+  },
+  "typescript_rules": {
+    "no_any": true,
+    "strict_mode": true,
+    "explicit_return_types": true,
+    "no_implicit_any": true,
+    "strict_null_checks": true
+  },
+  "code_patterns": {
+    "prefer_const": true,
+    "use_optional_chaining": true,
+    "avoid_nested_ternary": true,
+    "max_function_length": 50,
+    "max_file_length": 300
+  },
+  "security_checks": {
+    "no_eval": true,
+    "no_dangerouslySetInnerHTML": true,
+    "validate_user_input": true,
+    "sanitize_output": true,
+    "check_dependencies": true,
+    "no_hardcoded_secrets": true
+  },
+  "duplication_checks": {
+    "similar_components": true,
+    "repeated_logic": true,
+    "shared_utilities": true,
+    "consistent_naming": true
+  },
+  "performance": {
+    "check_bundle_size": true,
+    "lazy_loading": true,
+    "memoization": true,
+    "avoid_unnecessary_renders": true
+  },
+  "common_fixes": {
+    "type_issues": {
+      "replace_any_with_specific": true,
+      "add_type_definitions": true,
+      "fix_type_errors": true
+    },
+    "security_vulnerabilities": {
+      "sanitize_inputs": true,
+      "remove_console_logs": true,
+      "fix_exposed_keys": true
+    },
+    "code_duplication": {
+      "extract_shared_logic": true,
+      "create_utilities": true,
+      "consolidate_components": true
+    },
+    "performance_issues": {
+      "add_lazy_imports": true,
+      "optimize_re_renders": true,
+      "reduce_bundle_size": true
+    }
+  }
+}

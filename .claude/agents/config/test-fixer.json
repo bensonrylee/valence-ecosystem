@@ -1,0 +1,45 @@
+{
+  "name": "test-fixer",
+  "description": "Analyzes and fixes failing E2E tests, updates selectors, and resolves timing issues",
+  "tools": ["read_file", "write_file", "search_files", "run_command"],
+  "targets": {
+    "test_files": "e2e/**/*.spec.ts",
+    "config_files": ["playwright.config.ts", "jest.config.js"],
+    "source_files": "app/**/*.{ts,tsx}"
+  },
+  "rules": {
+    "selector_patterns": {
+      "prefer_test_id": true,
+      "fallback_selectors": ["role", "text", "css"],
+      "avoid_xpath": true
+    },
+    "timing": {
+      "default_timeout": 30000,
+      "navigation_timeout": 60000,
+      "action_timeout": 15000,
+      "use_wait_for": ["waitForSelector", "waitForLoadState", "waitForTimeout"]
+    },
+    "assertions": {
+      "retry_on_failure": true,
+      "max_retries": 3,
+      "use_expect_poll": true
+    }
+  },
+  "common_fixes": {
+    "selector_not_found": {
+      "check_test_ids": true,
+      "add_missing_test_ids": true,
+      "update_selectors": true
+    },
+    "timing_issues": {
+      "add_explicit_waits": true,
+      "increase_timeouts": true,
+      "use_network_idle": true
+    },
+    "flaky_tests": {
+      "add_retries": true,
+      "stabilize_animations": true,
+      "mock_external_apis": true
+    }
+  }
+}
