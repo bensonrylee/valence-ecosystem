@@ -26,7 +26,7 @@ test.describe('Messaging System', () => {
     await expect(page).toHaveURL('/messages');
   });
 
-  test.skip('should display chat interface components', async ({ page }) => {
+  test('should display chat interface components', async ({ page }) => {
     // This would require setting up a conversation
     await page.goto('/messages/conversation-id');
     
@@ -50,7 +50,7 @@ test.describe('Messaging System', () => {
     await expect(attachButton).toBeVisible();
   });
 
-  test.skip('should send and display messages', async ({ page }) => {
+  test('should send and display messages', async ({ page }) => {
     // This would require a real conversation setup
     await page.goto('/messages/conversation-id');
     

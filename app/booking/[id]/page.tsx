@@ -46,7 +46,9 @@ export default function BookingPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { user, isSignedIn } = useAuth();
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(tomorrow);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [notes, setNotes] = useState('');
   const [isBooking, setIsBooking] = useState(false);
@@ -140,15 +142,17 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                   <button
                     onClick={handlePreviousMonth}
                     className="p-1 hover:bg-gray-800 rounded transition-colors"
+                    aria-label="Previous month"
                   >
                     <ChevronLeft className="w-5 h-5 text-gray-400" />
                   </button>
-                  <span className="text-white font-medium px-3">
+                  <span className="text-white font-medium px-3" data-testid="current-month">
                     {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                   </span>
                   <button
                     onClick={handleNextMonth}
                     className="p-1 hover:bg-gray-800 rounded transition-colors"
+                    aria-label="Next month"
                   >
                     <ChevronRight className="w-5 h-5 text-gray-400" />
                   </button>
@@ -184,7 +188,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
             {selectedDate && (
               <div className="glass-panel p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">Select Time</h3>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {timeSlots.map(time => (
                     <button
                       key={time}
@@ -210,7 +214,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Any special requests or information for the provider..."
+                placeholder="Any special requests"
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-[#00FFAD] focus:ring-1 focus:ring-[#00FFAD] transition-all resize-none"
                 rows={4}
               />

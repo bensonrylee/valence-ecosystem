@@ -25,11 +25,21 @@ test.describe('Basic Navigation', () => {
     await expect(searchInput).toBeVisible();
   });
 
-  test('should navigate to auth pages', async ({ page }) => {
+  test('should navigate to auth pages', async ({ page, viewport }) => {
     await page.goto('/');
     
-    // Click on Sign In link
-    await page.getByTestId('sign-in-link').click();
+    // Check if viewport is mobile/small tablet (< 768px uses mobile menu)
+    if (viewport && viewport.width < 768) {
+      // On mobile, open the menu first
+      const menuButton = page.getByTestId('mobile-menu-button');
+      await menuButton.click();
+      
+      // Wait for mobile menu to be visible
+      await page.locator('.md\\:hidden.py-4').waitFor({ state: 'visible' });
+    }
+    
+    // Click on Sign In link (will find the visible one)
+    await page.getByTestId('sign-in-link').click({ force: true });
     
     // Should redirect to auth/sign-in
     await page.waitForURL('/auth/sign-in');

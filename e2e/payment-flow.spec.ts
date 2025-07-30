@@ -47,7 +47,7 @@ test.describe('Payment Integration', () => {
     await expect(page).toHaveURL(/\/auth\/sign-in/);
   });
 
-  test.skip('should create payment intent on booking confirmation', async ({ page }) => {
+  test('should create payment intent on booking confirmation', async ({ page }) => {
     // This would require mocking Stripe API
     // In real test, we'd intercept the API call
     

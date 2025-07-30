@@ -130,7 +130,7 @@ export default async function ServiceDetailPage({ params }: { params: { id: stri
 
             {/* Reviews Section */}
             <div className="glass-panel p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Reviews</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">Customer Reviews</h2>
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="border-b border-gray-800 last:border-0 pb-4 last:pb-0">
@@ -196,6 +196,71 @@ export default async function ServiceDetailPage({ params }: { params: { id: stri
               <p className="text-center text-gray-400 text-sm mt-4">
                 You won't be charged until after the service
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <div className="glass-panel p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white">Reviews</h2>
+              <div className="flex items-center gap-1">
+                <div className="flex text-yellow-400">
+                  {'★'.repeat(Math.floor(service.rating))}
+                </div>
+                <span className="text-white font-semibold ml-2">{service.rating}</span>
+                <span className="text-gray-400 ml-1">({service.reviews} reviews)</span>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {/* Mock Reviews */}
+              {[
+                {
+                  id: 1,
+                  customer: 'Customer 1',
+                  rating: 5,
+                  comment: 'Amazing yoga session! Sarah is very professional and helped me improve my flexibility.',
+                  date: '3 days ago'
+                },
+                {
+                  id: 2,
+                  customer: 'Customer 2',
+                  rating: 5,
+                  comment: 'Great experience. The personalized approach made all the difference.',
+                  date: '1 week ago'
+                },
+                {
+                  id: 3,
+                  customer: 'Customer 3',
+                  rating: 4,
+                  comment: 'Very helpful session. Would definitely book again.',
+                  date: '2 weeks ago'
+                }
+              ].map((review) => (
+                <div key={review.id} className="border-b border-gray-800 pb-6 last:border-b-0">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-white">
+                          {review.customer.split(' ').map(n => n[0]).join('')}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-white">{review.customer}</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className="flex text-yellow-400 text-sm">
+                            {'★'.repeat(review.rating)}
+                          </div>
+                          <span className="text-gray-400 text-sm">{review.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-gray-300">{review.comment}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

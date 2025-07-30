@@ -93,6 +93,8 @@ export function Navigation() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-gray-300 hover:text-white"
+              aria-label="menu"
+              data-testid="mobile-menu-button"
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -134,6 +136,7 @@ export function Navigation() {
                   href="/auth/sign-in"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-3 text-center text-gray-300 hover:text-[#00FFAD] transition-colors"
+                  data-testid="sign-in-link"
                 >
                   Sign In
                 </Link>

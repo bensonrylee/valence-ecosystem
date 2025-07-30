@@ -33,7 +33,7 @@ test.describe('Review System', () => {
     await expect(reviewButton).toBeVisible();
   });
 
-  test.skip('should display review form when clicking leave review', async ({ page }) => {
+  test('should display review form when clicking leave review', async ({ page }) => {
     // This would open the review modal/page
     await page.goto('/bookings');
     
@@ -54,7 +54,7 @@ test.describe('Review System', () => {
     await expect(starButtons).toHaveCount(5);
   });
 
-  test.skip('should allow star rating selection', async ({ page }) => {
+  test('should allow star rating selection', async ({ page }) => {
     // Navigate to review form
     await page.goto('/review/booking-id');
     
@@ -70,7 +70,7 @@ test.describe('Review System', () => {
     await expect(filledStars).toHaveCount(4);
   });
 
-  test.skip('should allow writing review comment', async ({ page }) => {
+  test('should allow writing review comment', async ({ page }) => {
     await page.goto('/review/booking-id');
     
     // Select rating first
@@ -85,7 +85,7 @@ test.describe('Review System', () => {
     await expect(page.getByText('89/500')).toBeVisible();
   });
 
-  test.skip('should show referral prompt for 5-star reviews', async ({ page }) => {
+  test('should show referral prompt for 5-star reviews', async ({ page }) => {
     await page.goto('/review/booking-id');
     
     // Select 5 stars
@@ -100,7 +100,7 @@ test.describe('Review System', () => {
     await expect(page.getByText('🎉')).toBeVisible();
   });
 
-  test.skip('should allow image upload in reviews', async ({ page }) => {
+  test('should allow image upload in reviews', async ({ page }) => {
     await page.goto('/review/booking-id');
     
     // Upload button should be visible
@@ -117,7 +117,7 @@ test.describe('Review System', () => {
     await expect(fileInput).toHaveAttribute('accept', 'image/*');
   });
 
-  test.skip('should submit review successfully', async ({ page }) => {
+  test('should submit review successfully', async ({ page }) => {
     await page.goto('/review/booking-id');
     
     // Select rating
@@ -138,7 +138,7 @@ test.describe('Review System', () => {
     // Would redirect to bookings or show success message
   });
 
-  test.skip('should allow skipping review', async ({ page }) => {
+  test('should allow skipping review', async ({ page }) => {
     await page.goto('/review/booking-id');
     
     // Skip button should be visible

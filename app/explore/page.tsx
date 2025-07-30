@@ -158,6 +158,13 @@ export default function ExplorePage() {
                 <Filter className="w-4 h-4 mr-2" />
                 Filter
               </button>
+              <button 
+                className="md:hidden flex items-center px-4 py-2 border border-[#00FFAD]/30 rounded-lg text-gray-300 hover:text-[#00FFAD] hover:border-[#00FFAD]/50 transition-all"
+                data-testid="mobile-filter-button"
+              >
+                <Filter className="w-4 h-4 mr-2" />
+                Filter
+              </button>
             </div>
 
             {/* Services Grid */}

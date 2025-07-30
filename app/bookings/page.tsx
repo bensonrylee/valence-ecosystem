@@ -129,6 +129,7 @@ export default function BookingsPage() {
                 ? 'text-[#00FFAD] border-b-2 border-[#00FFAD]'
                 : 'text-gray-400 hover:text-white'
             }`}
+            aria-label="Past bookings"
           >
             Past ({pastBookings.length})
           </button>
@@ -160,7 +161,7 @@ export default function BookingsPage() {
         ) : (
           <div className="space-y-4">
             {displayBookings.map((booking) => (
-              <div key={booking.id} className="glass-panel p-6 hover:bg-white/10 transition-colors">
+              <div key={booking.id} className="glass-panel p-6 hover:bg-white/10 transition-colors" data-testid="booking-card">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-gray-700 rounded-full flex-shrink-0"></div>
