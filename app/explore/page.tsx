@@ -205,7 +205,7 @@ export default function ExplorePage() {
                         ${service.price}/hr
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
