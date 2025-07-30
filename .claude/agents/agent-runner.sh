@@ -51,51 +51,59 @@ usage() {
 run_agent() {
     local agent_name=$1
     local target=$2
+    local config_file="${AGENT_DIR}/config/${agent_name}.json"
+    local prompt_file="${AGENT_DIR}/prompts/${agent_name}.md"
     
     echo -e "${BLUE}Running ${agent_name} agent...${NC}"
     
-    case $agent_name in
-        "test-fixer")
-            echo "Analyzing failing E2E tests..."
-            if [ -n "$target" ]; then
-                echo "Target: $target"
-            fi
-            # Simulate agent execution
-            echo -e "${GREEN}✓ Fixed selector issues in navigation tests${NC}"
-            echo -e "${GREEN}✓ Updated timing for loading states${NC}"
-            echo -e "${GREEN}✓ Resolved focus state test issues${NC}"
-            ;;
-            
-        "firebase-config")
-            echo "Checking Firebase configuration..."
-            echo -e "${YELLOW}⚠ Found missing FIREBASE_ADMIN_PROJECT_ID${NC}"
-            echo -e "${GREEN}✓ Added fallback configuration${NC}"
-            echo -e "${GREEN}✓ Fixed Admin SDK initialization${NC}"
-            ;;
-            
-        "ui-consistency")
-            echo "Validating UI consistency..."
-            echo -e "${GREEN}✓ Dark theme applied consistently${NC}"
-            echo -e "${GREEN}✓ Glass morphism effects verified${NC}"
-            echo -e "${GREEN}✓ Responsive breakpoints working${NC}"
-            ;;
-            
-        "booking-flow")
-            echo "Validating booking flow..."
-            echo -e "${GREEN}✓ Payment flow verified${NC}"
-            echo -e "${GREEN}✓ Escrow logic correct${NC}"
-            echo -e "${GREEN}✓ Review system functional${NC}"
-            ;;
-            
-        "code-quality")
-            echo "Analyzing code quality..."
-            echo -e "${YELLOW}⚠ Found 3 any types to fix${NC}"
-            echo -e "${GREEN}✓ No duplicate implementations${NC}"
-            echo -e "${GREEN}✓ Security best practices followed${NC}"
-            ;;
-    esac
+    # Check if config and prompt files exist
+    if [ ! -f "$config_file" ]; then
+        echo -e "${RED}Error: Config file not found: $config_file${NC}"
+        return 1
+    fi
+    
+    if [ ! -f "$prompt_file" ]; then
+        echo -e "${RED}Error: Prompt file not found: $prompt_file${NC}"
+        return 1
+    fi
+    
+    # Build the agent command
+    local agent_prompt="You are the ${agent_name} agent for Valence Ecosystem. 
+
+$(cat "$prompt_file")
+
+Project root: ${PROJECT_ROOT}
+Configuration: $(cat "$config_file")"
+    
+    if [ -n "$target" ]; then
+        agent_prompt="$agent_prompt
+
+Target file/directory: $target"
+    fi
+    
+    # Execute the agent using Claude CLI
+    echo -e "${YELLOW}Executing ${agent_name} agent...${NC}"
+    
+    # Create a temporary file for the prompt
+    local temp_prompt="/tmp/claude_agent_${agent_name}_$$.txt"
+    echo "$agent_prompt" > "$temp_prompt"
+    
+    # Run Claude with the agent prompt
+    cd "$PROJECT_ROOT"
+    $CLAUDE_CMD < "$temp_prompt"
+    local exit_code=$?
+    
+    # Clean up
+    rm -f "$temp_prompt"
+    
+    if [ $exit_code -eq 0 ]; then
+        echo -e "${GREEN}✓ ${agent_name} agent completed successfully${NC}"
+    else
+        echo -e "${RED}✗ ${agent_name} agent failed with exit code $exit_code${NC}"
+    fi
     
     echo ""
+    return $exit_code
 }
 
 # Main command processing
@@ -123,20 +131,47 @@ case "$1" in
     "pre-deploy")
         echo -e "${BLUE}Running pre-deployment validation pipeline...${NC}"
         echo ""
-        run_agent "code-quality"
-        run_agent "test-fixer"
-        run_agent "firebase-config"
-        run_agent "ui-consistency"
-        run_agent "booking-flow"
-        echo -e "${GREEN}✅ Pre-deployment validation complete!${NC}"
+        
+        # Track overall success
+        local all_passed=true
+        
+        # Run each validation agent
+        for agent in "code-quality" "test-fixer" "firebase-config" "ui-consistency" "booking-flow"; do
+            if ! run_agent "$agent"; then
+                all_passed=false
+            fi
+        done
+        
+        if [ "$all_passed" = true ]; then
+            echo -e "${GREEN}✅ Pre-deployment validation complete! All checks passed.${NC}"
+            exit 0
+        else
+            echo -e "${RED}❌ Pre-deployment validation failed. Please fix issues before deploying.${NC}"
+            exit 1
+        fi
         ;;
         
     "fix-all")
         echo -e "${BLUE}Running all fixing agents...${NC}"
         echo ""
-        run_agent "test-fixer"
-        run_agent "firebase-config"
-        echo -e "${GREEN}✅ All fixes applied!${NC}"
+        
+        # Track overall success
+        local all_passed=true
+        
+        # Run fixing agents
+        for agent in "test-fixer" "firebase-config"; do
+            if ! run_agent "$agent"; then
+                all_passed=false
+            fi
+        done
+        
+        if [ "$all_passed" = true ]; then
+            echo -e "${GREEN}✅ All fixes applied successfully!${NC}"
+            exit 0
+        else
+            echo -e "${RED}❌ Some fixes failed. Please check the output above.${NC}"
+            exit 1
+        fi
         ;;
         
     *)
