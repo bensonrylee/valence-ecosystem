@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { ClerkProvider } from '@clerk/nextjs';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Ecosystem - Find & Book Local Services',
-  description: 'Your trusted marketplace for professional services',
+  title: 'Valence Ecosystem - Find & Book Premium Services',
+  description: 'Discover and book premium local services with our modern marketplace platform.',
 };
 
 export default function RootLayout({
@@ -18,39 +18,39 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-dark text-white`}>
-        <ErrorBoundary>
-          <AuthProvider>
+    <ClerkProvider>
+      <html lang="en" className="dark">
+        <body className={`${inter.className} bg-[#0D0D0D] text-white antialiased`}>
+          <ErrorBoundary>
             {children}
-          </AuthProvider>
-        </ErrorBoundary>
-        <Toaster 
-          position="top-center"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: 'rgba(20, 20, 20, 0.95)',
-              color: '#fff',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-            },
-            success: {
-              iconTheme: {
-                primary: '#00FFAD',
-                secondary: '#000',
+          </ErrorBoundary>
+          <Toaster 
+            position="top-center"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: 'rgba(20, 20, 20, 0.95)',
+                color: '#fff',
+                borderRadius: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
               },
-            },
-            error: {
-              iconTheme: {
-                primary: '#FF4444',
-                secondary: '#fff',
+              success: {
+                iconTheme: {
+                  primary: '#00FFAD',
+                  secondary: '#000',
+                },
               },
-            },
-          }}
-        />
-      </body>
-    </html>
+              error: {
+                iconTheme: {
+                  primary: '#FF4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
