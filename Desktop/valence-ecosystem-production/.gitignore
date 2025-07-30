@@ -1,0 +1,200 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+/coverage
+/.nyc_output
+
+# Next.js
+/.next/
+/out/
+/build
+/.swc/
+
+# Production
+/dist
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# IDE - Others
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firebase-debug.*.log*
+.firebaserc
+firestore-debug.log
+pubsub-debug.log
+ui-debug.log
+emulators-debug.log
+
+# Logs
+logs/
+*.log
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Media files
+*.mp4
+*.mov
+*.avi
+*.webm
+*.mkv
+*.flv
+*.wmv
+*.mpg
+*.mpeg
+
+# Large files
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+.cache/
+tmp/
+temp/
+
+# Build files
+dist/
+build/
+*.min.js
+*.min.css
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+e2e-results/
+
+# Documentation build
+docs/_build/
+docs/.docusaurus/
+
+# Backups
+*.backup
+*.bak
+*.orig
+
+# Claude.md context files (keeping only necessary docs)
+claude.md/Context.md/*.mp4
+claude.md/Context.md/*.mov
+claude.md/Context.md/*.pdf
+claude.md/Context.md/*.docx
+claude.md/Context.md/*.xlsx
+
+# Sensitive data
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# Package manager
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
