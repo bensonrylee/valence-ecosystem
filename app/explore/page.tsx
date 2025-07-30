@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Search, Filter, MapPin } from 'lucide-react';
+import { servicesService } from '@/lib/supabase/services';
+import Link from 'next/link';
+import { Navigation } from '@/components/layout/Navigation';
 
 // Mock data for demonstration
 const mockServices = [
@@ -82,13 +85,15 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      <Navigation />
+      
       {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-white">Explore Services</h1>
             <button 
-              className="md:hidden flex items-center px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:text-white hover:border-gray-500"
+              className="md:hidden flex items-center px-4 py-2 border border-[#00FFAD]/30 rounded-lg text-gray-300 hover:text-[#00FFAD] hover:border-[#00FFAD]/50 transition-all"
               data-testid="mobile-filter-button"
             >
               <Filter className="w-4 h-4 mr-2" />
@@ -129,8 +134,8 @@ export default function ExplorePage() {
                     onClick={() => setSelectedCategory(category)}
                     className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
                       selectedCategory === category
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                        ? 'bg-[#00FFAD] text-gray-900'
+                        : 'text-gray-300 hover:text-[#00FFAD] hover:bg-gray-800'
                     }`}
                     data-testid={`category-${category.toLowerCase()}`}
                   >
@@ -148,7 +153,7 @@ export default function ExplorePage() {
               <p className="text-gray-400">
                 {isLoading ? 'Loading...' : `${filteredServices.length} services found`}
               </p>
-              <button className="hidden md:flex items-center px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:text-white hover:border-gray-500">
+              <button className="hidden md:flex items-center px-4 py-2 border border-[#00FFAD]/30 rounded-lg text-gray-300 hover:text-[#00FFAD] hover:border-[#00FFAD]/50 transition-all">
                 <Filter className="w-4 h-4 mr-2" />
                 Filter
               </button>
@@ -172,7 +177,7 @@ export default function ExplorePage() {
             ) : filteredServices.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredServices.map((service) => (
-                  <div key={service.id} className="glass-panel p-6 hover:bg-white/10 transition-colors cursor-pointer" data-testid="service-card">
+                  <Link key={service.id} href={`/services/${service.id}`} className="block glass-panel p-6 hover:bg-white/10 hover:border-[#00FFAD]/20 transition-all cursor-pointer" data-testid="service-card">
                     <div className="bg-gray-700 h-48 rounded-lg mb-4 flex items-center justify-center">
                       <span className="text-gray-400">Image</span>
                     </div>
@@ -196,7 +201,7 @@ export default function ExplorePage() {
                         <MapPin className="w-4 h-4 mr-1" />
                         {service.location}
                       </div>
-                      <div className="text-white font-semibold">
+                      <div className="text-[#00FFAD] font-semibold">
                         ${service.price}/hr
                       </div>
                     </div>
