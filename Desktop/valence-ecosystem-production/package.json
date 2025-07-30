@@ -14,7 +14,9 @@
     "firebase:emulators": "firebase emulators:start"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.28.0",
     "@stripe/stripe-js": "^2.2.0",
+    "@supabase/supabase-js": "^2.53.0",
     "@tailwindcss/forms": "^0.5.10",
     "clsx": "^2.1.1",
     "date-fns": "^3.0.6",
@@ -23,12 +25,13 @@
     "firebase-admin": "^12.0.0",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.303.0",
-    "next": "14.2.3",
+    "next": "^14.2.25",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.12.0",
     "stripe": "^14.12.0",
+    "svix": "^1.69.0",
     "tailwind-merge": "^3.3.1",
     "zod": "^3.22.4"
   },
